@@ -62,13 +62,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func showMenu() {
         let menu = NSMenu()
 
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "未知版本"
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
         menu.addItem(withTitle: "zoclip v\(version)", action: nil, keyEquivalent: "")
 
         menu.addItem(NSMenuItem.separator())
 
         menu.addItem(withTitle: "清空记录", action: #selector(clearHistory), keyEquivalent: "")
-        menu.addItem(withTitle: "退出", action: #selector(quitApp), keyEquivalent: "")
+        menu.addItem(withTitle: "退出", action: #selector(quitApp), keyEquivalent: "q")
 
         statusItem.menu = menu
         statusItem.button?.performClick(nil)

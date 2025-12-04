@@ -9,10 +9,10 @@ import SwiftUI
 @main
 struct zoclipApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+
     var body: some Scene {
         Settings {
-            EmptyView() // 不需要设置窗口
+            EmptyView()
         }
     }
 }
