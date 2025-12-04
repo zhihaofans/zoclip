@@ -5,13 +5,13 @@
 //  Created by zzh on 2025/12/3.
 //
 
-import Foundation
 import AppKit
 import Combine
+import Foundation
 
 class ClipboardManager: ObservableObject {
     static let shared = ClipboardManager()
-    
+
     @Published var history: [ClipItem] = []
     @Published var maxLimit: Int = 100
     private var timer: Timer?
@@ -32,7 +32,9 @@ class ClipboardManager: ObservableObject {
     private func historyURL() -> URL {
         baseFolder().appendingPathComponent("history.json")
     }
+
     private init() {
+        loadHistory()
         start()
     }
 
@@ -72,11 +74,12 @@ class ClipboardManager: ObservableObject {
             }
         }
     }
+
     func addItem(_ item: ClipItem) {
         // 去重：删掉相同内容或相同图片
         history.removeAll { old in
             (item.text != nil && item.text == old.text)
-            || (item.imagePath != nil && item.imagePath == old.imagePath)
+                || (item.imagePath != nil && item.imagePath == old.imagePath)
         }
 
         history.insert(item, at: 0)
@@ -87,6 +90,7 @@ class ClipboardManager: ObservableObject {
 
         saveHistory()
     }
+
     func copy(_ item: ClipItem) {
         NSPasteboard.general.clearContents()
 
@@ -98,7 +102,8 @@ class ClipboardManager: ObservableObject {
 
         case .image:
             if let path = item.imagePath,
-               let nsImage = NSImage(contentsOfFile: path) {
+               let nsImage = NSImage(contentsOfFile: path)
+            {
                 NSPasteboard.general.writeObjects([nsImage])
             }
 
@@ -111,6 +116,7 @@ class ClipboardManager: ObservableObject {
         history.removeAll { $0.id == item.id }
         saveHistory()
     }
+
     func saveImage(_ image: NSImage, to url: URL) {
         guard let tiff = image.tiffRepresentation,
               let bitmap = NSBitmapImageRep(data: tiff),
@@ -118,6 +124,7 @@ class ClipboardManager: ObservableObject {
 
         try? png.write(to: url)
     }
+
     func saveHistory() {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
