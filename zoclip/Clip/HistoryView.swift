@@ -40,14 +40,23 @@ struct HistoryView: View {
 
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach(filtered, id: \.self) { item in
+                    ForEach(filtered, id: \.id) { item in
                         HStack {
                             Button(action: {
                                 manager.copy(item)
                             }) {
-                                Text(item)
-                                    .lineLimit(2)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                if item.type == .text {
+                                    Text(item.text ?? "")
+                                        .lineLimit(2)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                } else if item.type == .image {
+                                        if let path = item.imagePath, let nsImage = NSImage(contentsOfFile: path) {
+                                            Image(nsImage: nsImage)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 80)
+                                        }
+                                    }
                             }
                             Button(action: {
                                 manager.delete(item)
@@ -66,8 +75,8 @@ struct HistoryView: View {
         .frame(minWidth: 300, minHeight: 400)
     }
 
-    private var filtered: [String] {
+    private var filtered: [ClipItem] {
         if search.isEmpty { return manager.history }
-        return manager.history.filter { $0.localizedCaseInsensitiveContains(search) }
+        return manager.history.filter { $0.text?.localizedCaseInsensitiveContains(search) ?? false }
     }
 }
