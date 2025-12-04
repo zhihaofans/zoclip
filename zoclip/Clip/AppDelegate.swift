@@ -14,6 +14,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var popover = NSPopover()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // 状态栏应用，没有 Dock 图标
+        NSApp.setActivationPolicy(.accessory)
         // 创建菜单栏图标
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
