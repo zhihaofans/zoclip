@@ -38,23 +38,30 @@ struct HistoryView: View {
             }
             .padding(.horizontal)
 
-            List(filtered, id: \.self) { item in
-                HStack {
-                    Button(action: {
-                        manager.copy(item)
-                    }) {
-                        Text(item)
-                            .lineLimit(2)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(filtered, id: \.self) { item in
+                        HStack {
+                            Button(action: {
+                                manager.copy(item)
+                            }) {
+                                Text(item)
+                                    .lineLimit(2)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            Button(action: {
+                                manager.delete(item)
+                            }) {
+                                Image(systemName: "trash")
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                        }
+                        .padding(.vertical, 4)
+                        Divider()
                     }
-                    Button(action: {
-                        manager.delete(item)
-                    }) {
-                        Image(systemName: "trash")
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
                 }
             }
+            .frame(maxHeight: .infinity)
         }
         .frame(minWidth: 300, minHeight: 400)
     }
